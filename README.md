@@ -22,7 +22,10 @@ g++ -o bobNET main.cpp dot11.cpp -lpcap -pthread
 ```
 
 ## Run screen
-![제목 없음](https://user-images.githubusercontent.com/57438644/99374917-738b8c80-2906-11eb-931b-7da53ce68430.jpg)
+![1](https://user-images.githubusercontent.com/57438644/100564126-71143400-3303-11eb-988c-fe00f58b7a58.png)
+
+## Function Selection screen
+![2](https://user-images.githubusercontent.com/57438644/100564136-73768e00-3303-11eb-8f79-31e4dccf9127.png)
 
 
 # Options
