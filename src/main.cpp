@@ -184,9 +184,7 @@ int main(int argc, char *argv[])
     printf("                               ");
     printf("    [6] Disasso Attack & Checking \n");
     printf("                               ");
-    printf("    [7] Resasso Attack & Checking \n");
-    printf("                               ");
-    printf("    [8] Exit \n");
+    printf("    [7] Exit \n");
     printf("                               ");
     printf("------------------------------------------\n");
     printf("select Menu Number : ");
@@ -209,8 +207,7 @@ int main(int argc, char *argv[])
         case 4 : exe_beacon(handle,sel_mac,sel_ap);break;
         case 5 : exe_deauth(handle,sel_mac);break;
         case 6 : exe_disasso(handle,sel_mac);break;
-        case 7 : exe_reasso(handle,sel_mac,sel_ap);break;
-        case 8 : return 0;
+        case 7 : return 0;
         default: continue;
     }
 
@@ -497,16 +494,11 @@ void thread_attack(pcap_t* handle,uint8_t *packet,uint8_t packet_size){
 }
 
 void exe_deauth(pcap_t* handle,vector<uint8_t> sel_mac){
-
-
-
-
-
     bool attack_defense=false;
     bool scan_run=true;
     uint8_t deauth_size=0;
     uint8_t *deauth=make_deauth(sel_mac,(uint8_t*)&deauth_size);
-
+    string a;
 
     time_t start,end;
     printf("Deauth testing..(for 30s)\n");
@@ -519,11 +511,19 @@ void exe_deauth(pcap_t* handle,vector<uint8_t> sel_mac){
     scan.join();
     end=time(NULL);
 
-    string a;
     if(attack_defense) a ="defensive";
     else a="not defensive";
 
+
+
     system("clear");
+
+    if (a=="defensive"){
+        cout << "--------------------------------------" << endl;
+        cout << "The AP's PMF function is activated." << endl;
+        cout << "--------------------------------------" << endl;
+    }
+
     printf("\n\n                               ");
     printf("------------------Result------------------\n");
     printf("                                         ");
@@ -1348,7 +1348,11 @@ void exe_disasso(pcap_t* handle,vector<uint8_t> sel_mac){
     else a="not defensive";
 
     system("clear");
-
+    if (a=="defensive"){
+        cout << "--------------------------------------" << endl;
+        cout << "The AP's PMF function is activated." << endl;
+        cout << "--------------------------------------" << endl;
+    }
     printf("\n\n                               ");
     printf("------------------Result------------------\n");
     printf("                                         ");
@@ -1360,13 +1364,13 @@ void exe_disasso(pcap_t* handle,vector<uint8_t> sel_mac){
 
 
 }
-
+/*
 void exe_reasso(pcap_t* handle,vector<uint8_t> sel_mac,struct ap sel_ap){
     uint8_t reasso_size;
-    /*
-    uint8_t *reasso1=make_reasso(sel_mac,sel_ap,(uint8_t*)&reasso_size,1);
-    uint8_t *reasso2=make_reasso(sel_mac,sel_ap,(uint8_t*)&reasso_size,2);
-    uint8_t *reasso3=make_reasso(sel_mac,sel_ap,(uint8_t*)&reasso_size,3);*/
+
+    //uint8_t *reasso1=make_reasso(sel_mac,sel_ap,(uint8_t*)&reasso_size,1);
+    //uint8_t *reasso2=make_reasso(sel_mac,sel_ap,(uint8_t*)&reasso_size,2);
+    //uint8_t *reasso3=make_reasso(sel_mac,sel_ap,(uint8_t*)&reasso_size,3);
     uint8_t *reasso1=make_reasso2(sel_mac,sel_ap,(uint8_t*)&reasso_size);
     uint8_t *reasso2=make_reasso2(sel_mac,sel_ap,(uint8_t*)&reasso_size);
     uint8_t *reasso3=make_reasso2(sel_mac,sel_ap,(uint8_t*)&reasso_size);
@@ -1379,7 +1383,7 @@ void exe_reasso(pcap_t* handle,vector<uint8_t> sel_mac,struct ap sel_ap){
 
     }
 }
-
+*/
 uint16_t in_cksum(uint16_t *addr, unsigned int len)
 {
   uint16_t answer = 0;
@@ -1407,7 +1411,7 @@ void help_intro(){
             "\n\n\n\n\n\n"
             "Wireless AP diagnostic tool - Version 1.0 (2020)\n"
             "Team - 234567.\n\n"
-            "usage : airodump <interface>\n\n\n"
+            "usage : bobNET <interface>\n\n\n"
             "First, select ap to diagnose and proceed.\n"
             "Second, select the attack menu to be diagnosed.\n\n"
             "Options - Number selection \n"
