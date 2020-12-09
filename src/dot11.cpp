@@ -342,3 +342,113 @@ uint8_t* make_reasso2(vector<uint8_t> mac,struct ap select,uint8_t* pk_size){
 
 
 }
+
+uint8_t* make_rts(vector<uint8_t> mac, struct ap select, uint8_t* pk_size) {
+
+	uint8_t *packet;
+	struct radiotap rts_radio;
+	rts_radio.version = 0;
+	rts_radio.pad = 0;
+	rts_radio.len = 8;
+	rts_radio.present = 0;
+
+
+	struct dot11_header2 rts_header;
+
+
+	for (int i = 0; i < 6; i++) {
+		rts_header.transmitter[i] = mac.at(i);
+	}
+
+	memset(rts_header.receiver, 0xFF, 6);
+	rts_header.duration = 0x0000;
+	rts_header.fcs = 0x0000;
+
+	rts_header.fc.protver = 0;
+	rts_header.fc.type = 1;
+	rts_header.fc.subtype = 12;
+	rts_header.fc.tods = 0;
+	rts_header.fc.fromds = 0;
+	rts_header.fc.moref = 0;
+	rts_header.fc.retry = 0;
+	rts_header.fc.power = 0;
+	rts_header.fc.mored = 0;
+	rts_header.fc.wep = 0;
+	rts_header.fc.rsvd = 0;
+
+
+
+
+
+
+	*(pk_size) = rts_radio.len + sizeof(struct dot11_header2);
+	packet = (uint8_t*)malloc(sizeof(uint8_t)*(*pk_size));
+
+	memcpy(packet, (uint8_t*)&rts_radio, rts_radio.len);
+	memcpy(packet + rts_radio.len, (uint8_t*)&rts_header, sizeof(struct dot11_header2));
+
+
+	/*
+	for(int i=0;i<*pk_size;i++)
+		printf("%02x",*(packet+i));
+	printf("\n");*/
+
+	return packet;
+
+
+}
+uint8_t* make_cts(vector<uint8_t> mac, struct ap select, uint8_t* pk_size) {
+
+	uint8_t *packet;
+	struct radiotap cts_radio;
+	cts_radio.version = 0;
+	cts_radio.pad = 0;
+	cts_radio.len = 8;
+	cts_radio.present = 0;
+
+
+	struct dot11_header2 cts_header;
+
+
+	for (int i = 0; i < 6; i++) {
+		cts_header.transmitter[i] = mac.at(i);
+	}
+
+	memset(cts_header.receiver, 0xFF, 6);
+	cts_header.duration = 0x0000;
+	cts_header.fcs = 0x0000;
+
+	cts_header.fc.protver = 0;
+	cts_header.fc.type = 1;
+	cts_header.fc.subtype = 11;
+	cts_header.fc.tods = 0;
+	cts_header.fc.fromds = 0;
+	cts_header.fc.moref = 0;
+	cts_header.fc.retry = 0;
+	cts_header.fc.power = 0;
+	cts_header.fc.mored = 0;
+	cts_header.fc.wep = 0;
+	cts_header.fc.rsvd = 0;
+
+
+
+
+
+
+	*(pk_size) = cts_radio.len + sizeof(struct dot11_header2);
+	packet = (uint8_t*)malloc(sizeof(uint8_t)*(*pk_size));
+
+	memcpy(packet, (uint8_t*)&cts_radio, cts_radio.len);
+	memcpy(packet + cts_radio.len, (uint8_t*)&cts_header, sizeof(struct dot11_header2));
+
+
+	/*
+	for(int i=0;i<*pk_size;i++)
+		printf("%02x",*(packet+i));
+	printf("\n");*/
+
+	return packet;
+
+
+}
+

