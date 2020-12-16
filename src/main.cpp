@@ -449,10 +449,13 @@ void print_ap(set<vector<uint8_t>> ap_list,map<vector<uint8_t>,struct ap> ap_ls)
             printf("\n");
 
 }
-
+double cnt_time=0;
 void thread_scan(pcap_t* handle,bool *attack,bool *run,vector<uint8_t> sel){
 
     uint8_t pk_cnt=0;
+
+    time_t start2,end2;
+    start2=time(NULL);
     sleep(5);
     //printf("scan start\n");
     while(*run){
@@ -486,7 +489,12 @@ void thread_scan(pcap_t* handle,bool *attack,bool *run,vector<uint8_t> sel){
         printf("\n");
         */
 
-        if(++pk_cnt>2){*attack=true;break;}
+        if(++pk_cnt>2){
+            *attack=true;
+            end2=time(NULL);
+            cnt_time = (double)end2-start2;
+            break;
+        }
     }
 }
 
@@ -509,6 +517,7 @@ void exe_deauth(pcap_t* handle,vector<uint8_t> sel_mac){
     string a;
 
     time_t start,end;
+
     printf("Deauth testing..(for 30s)\n");
     start=time(NULL);
     thread attack = thread(thread_attack,handle,deauth,deauth_size);
@@ -518,6 +527,7 @@ void exe_deauth(pcap_t* handle,vector<uint8_t> sel_mac){
     if((!attack.joinable())&&(scan.joinable())) scan_run=false;
     scan.join();
     end=time(NULL);
+    end2=time(NULL);
 
     if(attack_defense) a ="defensive";
     else a="not defensive";
@@ -529,6 +539,7 @@ void exe_deauth(pcap_t* handle,vector<uint8_t> sel_mac){
     if (a=="defensive"){
         cout << "--------------------------------------" << endl;
         cout << "The AP's PMF function is activated." << endl;
+        printf("PMF detection time : %f\n",(double)cnt_time);
         cout << "--------------------------------------" << endl;
     }
 
@@ -540,7 +551,6 @@ void exe_deauth(pcap_t* handle,vector<uint8_t> sel_mac){
     printf("Deauth defense : %s\n",a.c_str());
     printf("                               ");
     printf("------------------------------------------\n");
-
 
 }
 void exe_beacon(pcap_t* handle,vector<uint8_t> sel_mac,struct ap sel_ap){
@@ -1359,6 +1369,7 @@ void exe_disasso(pcap_t* handle,vector<uint8_t> sel_mac){
     if (a=="defensive"){
         cout << "--------------------------------------" << endl;
         cout << "The AP's PMF function is activated." << endl;
+        printf("PMF detection time : %f\n",(double)cnt_time);
         cout << "--------------------------------------" << endl;
     }
     printf("\n\n                               ");
