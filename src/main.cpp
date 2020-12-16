@@ -527,7 +527,6 @@ void exe_deauth(pcap_t* handle,vector<uint8_t> sel_mac){
     if((!attack.joinable())&&(scan.joinable())) scan_run=false;
     scan.join();
     end=time(NULL);
-    end2=time(NULL);
 
     if(attack_defense) a ="defensive";
     else a="not defensive";
